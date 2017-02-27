@@ -1,16 +1,20 @@
 import random
+import math
+
 from graphics import *
 from tspProposals import *
 from basic import *
 
+
 PROPOSALS = [
-    swapRandom
+    swapRandom,
+    # shiftRight
 ]
 WINDOW_SIZE = 800
 MARGIN = 0
-POINTS_SIZE = 40
+POINTS_SIZE = 50
 
-POINTS = [(random.randrange(MARGIN,WINDOW_SIZE-MARGIN),random.randrange(MARGIN,WINDOW_SIZE-MARGIN)) for i in range(POINTS_SIZE)]
+# POINTS = [(random.randrange(MARGIN,WINDOW_SIZE-MARGIN),random.randrange(MARGIN,WINDOW_SIZE-MARGIN)) for i in range(POINTS_SIZE)]
 
 def tsp(points):
     total = 0
@@ -30,9 +34,13 @@ def plot(win,points):
         Line(Point(p[0],p[1]),Point(q[0],q[1])).draw(win)
         Circle(Point(q[0],q[1]),1).draw(win)
 
+def circle():
+    return [((WINDOW_SIZE/4)*(math.sin(i)+1)+MARGIN,(WINDOW_SIZE/4)*(math.cos(i)+1)+MARGIN) for i in range(POINTS_SIZE)]
 
 
 def main():
+    POINTS = circle()
+
     win = GraphWin("My Circle", WINDOW_SIZE, WINDOW_SIZE)
 
 

@@ -22,3 +22,13 @@ def shuffle(points):
     proxy = points[:]
     random.shuffle(proxy)
     return proxy
+
+def swapLocal(points):
+    proxy = points[:]
+    i = random.randrange(0,len(points)-1) #randrange doesn't include upper bound
+    proxy[i],proxy[i+1] = proxy[i+1],proxy[i]
+    return proxy
+
+def shiftRight(points):
+    proxy = points[1:] + [points[0]]
+    return proxy
