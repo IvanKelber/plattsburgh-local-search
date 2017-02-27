@@ -8,13 +8,16 @@ from basic import *
 
 PROPOSALS = [
     swapRandom,
-    # shiftRight
+    # swapBeginning,
+    # swapLocal,
+    # shuffle
 ]
 WINDOW_SIZE = 800
-MARGIN = 0
-POINTS_SIZE = 50
+MARGIN = WINDOW_SIZE/4
+NUM_POINTS = 100
+POINT_RADIUS = 3
 
-# POINTS = [(random.randrange(MARGIN,WINDOW_SIZE-MARGIN),random.randrange(MARGIN,WINDOW_SIZE-MARGIN)) for i in range(POINTS_SIZE)]
+# POINTS = [(random.randrange(MARGIN,WINDOW_SIZE-MARGIN),random.randrange(MARGIN,WINDOW_SIZE-MARGIN)) for i in range(NUM_POINTS)]
 
 def tsp(points):
     total = 0
@@ -30,12 +33,14 @@ def plot(win,points):
     r.setFill("white")
     r.draw(win)
     for p,q in zip(points,points[1:]):
-        Circle(Point(p[0],p[1]),1).draw(win)
         Line(Point(p[0],p[1]),Point(q[0],q[1])).draw(win)
-        Circle(Point(q[0],q[1]),1).draw(win)
+        c = Circle(Point(p[0],p[1]),POINT_RADIUS)
+        c.setFill("red")
+        c.setOutline("red")
+        c.draw(win)
 
 def circle():
-    return [((WINDOW_SIZE/4)*(math.sin(i)+1)+MARGIN,(WINDOW_SIZE/4)*(math.cos(i)+1)+MARGIN) for i in range(POINTS_SIZE)]
+    return [((WINDOW_SIZE/4)*(math.sin(i)+1)+MARGIN,(WINDOW_SIZE/4)*(math.cos(i)+1)+MARGIN) for i in range(NUM_POINTS)]
 
 
 def main():
@@ -49,9 +54,9 @@ def main():
     bestSoFar = xp
     print "Starting Guess: %.10f" % tsp(POINTS)
     for eps in epsilons:
-        for i in range(3):
+        for i in range(5):
             plot(win,xp)
-            xp = localSearch(tsp,random.choice(PROPOSALS),xp,eps,.5)
+            xp = localSearch(tsp,random.choice(PROPOSALS),xp,eps,1)
             if(tsp(xp) <= tsp(bestSoFar)):
                 bestSoFar = xp
         print "Best for epsilon %.2f: %.10f" %(eps, tsp(bestSoFar))
