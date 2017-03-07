@@ -11,8 +11,14 @@ from circle import circles
 
 from proposals import *
 
-WINDOW_SIZE = 300
-MARGIN = WINDOW_SIZE/4
+PROPOSALS = [
+    # swapRandom,
+    randomNoise,
+    # shufflePoints
+]
+
+WINDOW_SIZE = 500
+MARGIN = 15
 NUM_POINTS = 10
 POINT_RADIUS = 1
 
@@ -20,6 +26,9 @@ POINTS = [(random.randrange(MARGIN,WINDOW_SIZE-MARGIN),random.randrange(MARGIN,W
 
 
 def plot(win,points):
+    r = Rectangle(Point(0,0),Point(WINDOW_SIZE,WINDOW_SIZE))
+    r.setFill("white")
+    r.draw(win)
     for radius in range(len(points)):
         point = points[radius]
         c = Circle(Point(point[0],point[1]),radius)
@@ -29,7 +38,24 @@ def plot(win,points):
 def main():
     win = GraphWin("My Graph",WINDOW_SIZE,WINDOW_SIZE)
     plot(win,POINTS)
-    print circles(POINTS)
+
+    epsilons = [1000,100,500,200,200,50,100]
+    xp = POINTS
+    bestSoFar = xp
+    print "Starting Guess: %.10f" % circles(POINTS)
+    start = time.clock()
+    for eps in epsilons:
+        for i in range(5):
+            plot(win,xp)
+            xp = localSearch(circles,random.choice(PROPOSALS),xp,eps,1)
+            if(circles(xp) <= circles(bestSoFar)):
+                bestSoFar = xp
+        print "Best for epsilon %.2f: %.10f" %(eps, circles(bestSoFar))
+    print "=========="
+    print "Original: ", circles(POINTS)
+    print "Best: ", circles(bestSoFar)
+    end = time.clock()
+    plot(win,bestSoFar)
 
     raw_input(">")
 if __name__ == '__main__':
