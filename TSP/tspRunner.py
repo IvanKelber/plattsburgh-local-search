@@ -23,8 +23,8 @@ from proposals import *
 PATCHES = []
 
 PROPOSALS = [
-    swapPairs,
-    swapRandom,
+    # swapPairs,
+    # swapRandom,
     insertion,
     # swapBeginning,
     # swapLocal,
@@ -33,7 +33,8 @@ PROPOSALS = [
 RADIUS = 100
 NUM_POINTS = 100
 POINT_RADIUS = RADIUS/NUM_POINTS
-
+PER_EPSILON = 5
+SECONDS_PER_SEARCH = 1
 
 def random_locus():
     return [(random.randrange(0,RADIUS),random.randrange(0,RADIUS)) for i in range(NUM_POINTS)]
@@ -44,8 +45,8 @@ def tsp(points):
         total += distance(p,q)
     return total
 
-def circle_locus():
-    return [((RADIUS)*(math.sin(i*math.pi*2/NUM_POINTS)+1),(RADIUS)*(math.cos(i*math.pi*2/NUM_POINTS)+1)) for i in range(NUM_POINTS)]
+def circle_locus(period=1):
+    return [((RADIUS)*(math.sin(i*math.pi*2*period/NUM_POINTS)+1),(RADIUS)*(math.cos(i*math.pi*2*period/NUM_POINTS)+1)) for i in range(NUM_POINTS)]
 
 def sin_wave_locus(period):
         return [(i*period*2,(RADIUS)*(math.sin(i*1*math.pi*2*period/NUM_POINTS)+1)) for i in range(NUM_POINTS)]
@@ -83,6 +84,31 @@ def plot_points(points):
 
     return x_values,y_values
 
+def draw_path(points):
+    clear()
+    x_values = y_values = []
+    lines = []
+    for p,q in zip(points,points[1:]):
+        # x_values.append(p[0])
+        # y_values.append(p[1])
+        line = mlines.Line2D([p[0],q[0]], [p[1],q[1]], lw=2, alpha=1,color='white',zorder=1)
+        lines.append(line)
+        ax.add_line(line)
+        plt.axis('equal')
+        plt.axis('off')
+
+    # line.set_color('black')
+    for line,next_line in zip(lines,lines[1:]):
+        line.set_color('black')
+        next_line.set_color('green')
+        plt.pause(.025)
+    lines[-1].set_color('black')
+    # line = mlines.Line2D(x_values,y_values, lw=1, alpha=0,color='black',zorder=1)
+
+
+
+
+
 def clear():
     global PATCHES
     PATCHES = []
@@ -92,19 +118,19 @@ def clear():
 
 
 def main():
-    POINTS = sin_wave_locus(2)
+    POINTS = circle_locus()
     random.shuffle(POINTS)
     plt.ion()
 
-    epsilons = [100,75,50,40,20,10,10]
+    epsilons = [100,75,50,40,35,30,20,10]
     xp = POINTS
     bestSoFar = xp
     print "Starting Guess: %.10f" % tsp(POINTS)
     start = time.clock()
-    for eps in epsilons:
-        for i in range(5):
+    for i, eps in enumerate(epsilons):
+        for _ in range(PER_EPSILON):
             plot(xp)
-            xp = localSearch(tsp,random.choice(PROPOSALS),xp,eps,NUM_POINTS/100 + .5)
+            xp = localSearch(tsp,random.choice(PROPOSALS),xp,eps,SECONDS_PER_SEARCH)
             if(tsp(xp) <= tsp(bestSoFar)):
                 bestSoFar = xp
         print "Best for epsilon %.2f: %.10f" %(eps, tsp(bestSoFar))
@@ -113,7 +139,10 @@ def main():
     print "Best: ", tsp(bestSoFar)
     print "Actual Best: ", 2*(RADIUS)*math.pi
     end = time.clock()
-    plot(bestSoFar)
+    # plot(bestSoFar)
+    clear()
+    draw_path(bestSoFar)
+    # clear()
 
     raw_input("Took %.4f seconds. Press enter to close:" % (end-start))
 

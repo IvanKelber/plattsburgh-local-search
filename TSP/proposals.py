@@ -3,8 +3,10 @@ import random
 def swapRandom(points):
     proxy = points[:]
     length = len(points)
+    indices = [i for i in range(len(points))]
     i = random.randint(0,length-1)
-    j = random.randint(0,length-1)
+    del indices[i]
+    j = random.choice(indices)
     proxy[i],proxy[j] = proxy[j],proxy[i]
     return proxy
 
