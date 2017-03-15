@@ -3,25 +3,40 @@ import math
 import sys
 import time
 
+import matplotlib as mpl
+mpl.rcParams['toolbar'] = 'None'
+import numpy as np
+import matplotlib.pyplot as plt
+import matplotlib.lines as mlines
+import matplotlib.patches as mpatches
+from matplotlib.collections import PatchCollection
+
+fig, ax = plt.subplots()
+
+
 sys.path.append('../') #add parent directory to import path
-from graphics import GraphWin,Point,Circle,Line,Rectangle
+# from graphics import GraphWin,Point,Circle,Line,Rectangle
 from basic import localSearch
 
 from proposals import *
 
+PATCHES = []
+
 PROPOSALS = [
     swapPairs,
     swapRandom,
+    insertion,
     # swapBeginning,
-    swapLocal,
+    # swapLocal,
     # shuffle,
 ]
-WINDOW_SIZE = 800
-MARGIN = WINDOW_SIZE/4
+RADIUS = 100
 NUM_POINTS = 100
-POINT_RADIUS = 3
+POINT_RADIUS = RADIUS/NUM_POINTS
 
-# POINTS = [(random.randrange(MARGIN,WINDOW_SIZE-MARGIN),random.randrange(MARGIN,WINDOW_SIZE-MARGIN)) for i in range(NUM_POINTS)]
+
+def random_locus():
+    return [(random.randrange(0,RADIUS),random.randrange(0,RADIUS)) for i in range(NUM_POINTS)]
 
 def tsp(points):
     total = 0
@@ -29,49 +44,76 @@ def tsp(points):
         total += distance(p,q)
     return total
 
+def circle_locus():
+    return [((RADIUS)*(math.sin(i*math.pi*2/NUM_POINTS)+1),(RADIUS)*(math.cos(i*math.pi*2/NUM_POINTS)+1)) for i in range(NUM_POINTS)]
+
+def sin_wave_locus(period):
+        return [(i*period*2,(RADIUS)*(math.sin(i*1*math.pi*2*period/NUM_POINTS)+1)) for i in range(NUM_POINTS)]
+
+
 def distance(p,q):
     return ((q[0]-p[0])**2 + (q[1]-p[1])**2)**.5
 
-def plot(win,points):
-    r = Rectangle(Point(0,0),Point(WINDOW_SIZE,WINDOW_SIZE))
-    r.setFill("white")
-    r.draw(win)
-    for p,q in zip(points,points[1:]):
-        Line(Point(p[0],p[1]),Point(q[0],q[1])).draw(win)
-        c = Circle(Point(p[0],p[1]),POINT_RADIUS)
-        c.setFill("red")
-        c.setOutline("red")
-        c.draw(win)
+def plot(points):
 
-def circle():
-    return [((WINDOW_SIZE/4)*(math.sin(i*math.pi*2/NUM_POINTS)+1)+MARGIN,(WINDOW_SIZE/4)*(math.cos(i*math.pi*2/NUM_POINTS)+1)+MARGIN) for i in range(NUM_POINTS)]
+    x_values, y_values = plot_points(points)
+    line = mlines.Line2D(x_values, y_values, lw=1, alpha=1,color='black',zorder=1)
+    ax.add_line(line)
+
+    plt.axis('equal')
+    plt.axis('off')
+
+    plt.pause(.01)
+
+def plot_points(points):
+    clear()
+    global PATCHES
+    x_values = []
+    y_values = []
+    plot_points = points
+    for plot_point_index,point in enumerate(points):
+        x_values.append(point[0])
+        y_values.append(point[1])
+        circle = mpatches.Circle(list(plot_points[plot_point_index]), POINT_RADIUS, ec="none")
+        PATCHES.append(circle)
+    colors = np.linspace(0, 1, len(PATCHES))
+    collection = PatchCollection(PATCHES, color='red', alpha=1,zorder=2)
+    # collection.set_array(np.array(colors))
+    ax.add_collection(collection)
+
+    return x_values,y_values
+
+def clear():
+    global PATCHES
+    PATCHES = []
+    plt.cla()
+
+
 
 
 def main():
-    POINTS = circle()
+    POINTS = sin_wave_locus(2)
     random.shuffle(POINTS)
+    plt.ion()
 
-    win = GraphWin("My Circle", WINDOW_SIZE, WINDOW_SIZE)
-
-
-    epsilons = [100,75,50,40,30,75,10]
+    epsilons = [100,75,50,40,20,10,10]
     xp = POINTS
     bestSoFar = xp
     print "Starting Guess: %.10f" % tsp(POINTS)
     start = time.clock()
     for eps in epsilons:
         for i in range(5):
-            plot(win,xp)
-            xp = localSearch(tsp,random.choice(PROPOSALS),xp,eps,1)
+            plot(xp)
+            xp = localSearch(tsp,random.choice(PROPOSALS),xp,eps,NUM_POINTS/100 + .5)
             if(tsp(xp) <= tsp(bestSoFar)):
                 bestSoFar = xp
         print "Best for epsilon %.2f: %.10f" %(eps, tsp(bestSoFar))
     print "=========="
     print "Original: ", tsp(POINTS)
     print "Best: ", tsp(bestSoFar)
-    print "Actual Best: ", (WINDOW_SIZE/2)*math.pi
+    print "Actual Best: ", 2*(RADIUS)*math.pi
     end = time.clock()
-    plot(win,bestSoFar)
+    plot(bestSoFar)
 
     raw_input("Took %.4f seconds. Press enter to close:" % (end-start))
 

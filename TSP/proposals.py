@@ -18,6 +18,17 @@ def swapPairs(points):
     proxy[i:i+1],proxy[j:j+1] = proxy[j:j+1], proxy[i:i+1]
     return proxy
 
+def insertion(points):
+    proxy = points[:]
+    length = len(points)
+    i = random.randrange(0,length-1) #randrange doesn't include upper bound
+    j = random.randint(0,length-1) #randint includes upper bound
+    toInsert = proxy[j]
+    del proxy[j]
+    proxy = proxy[:i+1] + [toInsert] + proxy[i+1:]
+    if(len(proxy) != length):
+        print "ERROR: %d != %d" % (len(proxy),length)
+    return proxy
 
 def cutCards(points):
     i = random.randint(0,len(points)-1)
