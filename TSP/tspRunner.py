@@ -9,9 +9,6 @@ from basic import localSearch
 
 from proposals import *
 
-
-
-
 PROPOSALS = [
     swapPairs,
     swapRandom,
@@ -21,7 +18,7 @@ PROPOSALS = [
 ]
 WINDOW_SIZE = 800
 MARGIN = WINDOW_SIZE/4
-NUM_POINTS = 50
+NUM_POINTS = 100
 POINT_RADIUS = 3
 
 # POINTS = [(random.randrange(MARGIN,WINDOW_SIZE-MARGIN),random.randrange(MARGIN,WINDOW_SIZE-MARGIN)) for i in range(NUM_POINTS)]
@@ -57,7 +54,7 @@ def main():
     win = GraphWin("My Circle", WINDOW_SIZE, WINDOW_SIZE)
 
 
-    epsilons = [1000,100,500,200,200,50,100]
+    epsilons = [100,75,50,40,30,75,10]
     xp = POINTS
     bestSoFar = xp
     print "Starting Guess: %.10f" % tsp(POINTS)
@@ -65,13 +62,14 @@ def main():
     for eps in epsilons:
         for i in range(5):
             plot(win,xp)
-            xp = localSearch(tsp,random.choice(PROPOSALS),xp,eps,3)
+            xp = localSearch(tsp,random.choice(PROPOSALS),xp,eps,1)
             if(tsp(xp) <= tsp(bestSoFar)):
                 bestSoFar = xp
         print "Best for epsilon %.2f: %.10f" %(eps, tsp(bestSoFar))
     print "=========="
     print "Original: ", tsp(POINTS)
     print "Best: ", tsp(bestSoFar)
+    print "Actual Best: ", (WINDOW_SIZE/2)*math.pi
     end = time.clock()
     plot(win,bestSoFar)
 
