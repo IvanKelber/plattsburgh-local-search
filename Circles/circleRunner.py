@@ -27,7 +27,7 @@ PROPOSALS = [
     singleRandomNoise,
 ]
 
-WINDOW_SIZE = 1000
+WINDOW_SIZE = 500
 MARGIN = 0
 NUM_POINTS = 10
 POINT_RADIUS = 1
@@ -80,6 +80,7 @@ def main():
 
 
     plot(POINTS)
+    raw_input("Press enter to continue:")
 
     epsilons = [0.05,0.03,0.04,0.02,0.01]
     xp = POINTS

@@ -27,7 +27,7 @@ def circles(points):
                 distance[radius][radius2] = dist(point,point2,radius,radius2)
                 if(distance[radius][radius2] < 0):
                     # printDistance(distance)
-                    return 1000
+                    return sys.maxint
 
     # printDistance(distance)
     return max(maxY-minY,maxX-minX)

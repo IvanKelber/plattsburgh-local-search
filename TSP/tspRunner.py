@@ -34,7 +34,7 @@ RADIUS = 100
 NUM_POINTS = 100
 POINT_RADIUS = RADIUS/NUM_POINTS
 PER_EPSILON = 5
-SECONDS_PER_SEARCH = 1
+SECONDS_PER_SEARCH = 2
 
 def random_locus():
     return [(random.randrange(0,RADIUS),random.randrange(0,RADIUS)) for i in range(NUM_POINTS)]
@@ -48,7 +48,7 @@ def tsp(points):
 def circle_locus(period=1):
     return [((RADIUS)*(math.sin(i*math.pi*2*period/NUM_POINTS)+1),(RADIUS)*(math.cos(i*math.pi*2*period/NUM_POINTS)+1)) for i in range(NUM_POINTS)]
 
-def sin_wave_locus(period):
+def sin_wave_locus(period=2):
         return [(i*period*2,(RADIUS)*(math.sin(i*1*math.pi*2*period/NUM_POINTS)+1)) for i in range(NUM_POINTS)]
 
 
@@ -118,11 +118,11 @@ def clear():
 
 
 def main():
-    POINTS = circle_locus()
+    POINTS = sin_wave_locus()
     random.shuffle(POINTS)
     plt.ion()
 
-    epsilons = [100,75,50,40,35,30,20,10]
+    epsilons = [100,75,50,40,30,20,10,5]
     xp = POINTS
     bestSoFar = xp
     print "Starting Guess: %.10f" % tsp(POINTS)
