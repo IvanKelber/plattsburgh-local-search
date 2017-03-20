@@ -117,8 +117,17 @@ def clear():
 
 
 
-def main():
-    POINTS = sin_wave_locus()
+def main(locus):
+    if(locus == "circle"):
+        POINTS = circle_locus()
+    elif(locus == "random"):
+        POINTS = random_locus()
+    elif(locus == "sin"):
+        POINTS = sin_wave_locus()
+    else:
+        print "Locus '" + locus + "' doesn't exist!"
+        sys.exit(0)
+
     random.shuffle(POINTS)
     plt.ion()
 
@@ -137,7 +146,6 @@ def main():
     print "=========="
     print "Original: ", tsp(POINTS)
     print "Best: ", tsp(bestSoFar)
-    print "Actual Best: ", 2*(RADIUS)*math.pi
     end = time.clock()
     # plot(bestSoFar)
     clear()
@@ -147,4 +155,5 @@ def main():
     raw_input("Took %.4f seconds. Press enter to close:" % (end-start))
 
 if __name__ == '__main__':
-    main()
+    locus = sys.argv[1] if len(sys.argv) > 1 else "default"
+    main(locus)
