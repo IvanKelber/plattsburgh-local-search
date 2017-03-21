@@ -28,7 +28,6 @@ from matplotlib.collections import PatchCollection
 sys.path.append('../') #add parent directory to import path
 from basic import localSearch
 from circle import circles
-
 from proposals import *
 
 #Globals for graphics
@@ -135,6 +134,6 @@ def main():
 
     raw_input("Took %.4f seconds. Press enter to close:" % (end-start))
 
-    
+
 if __name__ == '__main__':
     main()
