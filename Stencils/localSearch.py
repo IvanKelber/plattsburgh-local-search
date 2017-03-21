@@ -25,15 +25,33 @@ def localSearch(func,proposalFunc,startingX,epsilon,timeThresh):
 
 
 def main():
-    # Note that we are optimizing a convex function.  This is to compare local search
-    # to gradient descent.  We will attempt more interesting problems in other stencils.
-    parabola = lambda x: x**2
+    # Note that we are optimizing a convex function.  This is in part because
+    # we'd like to compare local search to gradient descent. It is also because
+    # we have not yet developed sophisticated proposal functions.  Instead the
+    # stencil provides a proposal function that adds random noise to x.
+    # Why can this be a bad thing?
+    parabola = lambda x: x*x
     proposalFunc = lambda x: x + (random.random() - .5)/10 #randomly add [-.05,.05] to x
     startingX = "FILL IN"
     epsilon = "THESE PARAMETERS"
     timeThresh = "EXPERIMENT!"
 
     print localSearch(parabola,proposalFunc,startingX,epsilon,timeThresh)
+
+    # Here we are optimizing a non-convex function.  Pay careful attention to
+    # what you set epsilon and startingX to.  Ideally, startingX shouldn't matter.
+    # However, depending on epsilon it appears to matter in this case.  Why?
+    # Hint: How are we searching?
+
+    nonConvex = lambda x: x*(x-1)*(x-2)*(x-3)
+    proposalFunc = lambda x: x + (random.random() - .5)/10 #randomly add [-.05,.05] to x
+    startingX = "FILL IN"
+    epsilon = "THESE PARAMETERS"
+    timeThresh = "EXPERIMENT!"
+
+    print localSearch(nonConvex,proposalFunc,startingX,epsilon,timeThresh)
+
+
 
 if __name__ == '__main__':
     main()
