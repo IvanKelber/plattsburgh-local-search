@@ -19,7 +19,8 @@
 # - If you're getting 'stuck' at a certain optimum and can't seem to get past it,
 #     it might mean that you're in a local minimum and need to explore more.  Try to change epsilon.
 # - There is no right answer.  Many things will work so try whatever you can think of!
-
+# - If you're having trouble thinking of proposal functions, try drawing potential scenarios
+#     on paper!  Small cases can extend to large cases when run hundreds of times a second.
 
 import random
 import math
@@ -43,6 +44,13 @@ from proposals import *
 fig, ax = plt.subplots()
 PATCHES = []
 
+# TODO: Select your proposals here. A list of function handles.
+# Remember that you can have as many proposals as you want.  Though having too
+# many might affect performance.
+PROPOSALS = [
+    wideScaleRandomNoise,
+]
+
 # TODO: Fill these parameters in
 EPSILONS = [] # The order of the epsilons to try.
 SECONDS_PER_SEARCH = 0 # The number of seconds to run local search for each set of parameters
@@ -55,12 +63,7 @@ NUM_POINTS = 10
 POINTS = [(random.randrange(MARGIN,WINDOW_SIZE-MARGIN),random.randrange(MARGIN,WINDOW_SIZE-MARGIN)) for i in range(NUM_POINTS)]
 
 
-# Select your proposals here. A list of function handles.
-# Remember that you can have as many proposals as you want.  Though having too
-# many might affect performance.
-PROPOSALS = [
-    wideScaleRandomNoise,
-]
+
 
 def main():
     plt.ion()
