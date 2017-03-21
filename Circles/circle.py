@@ -1,10 +1,21 @@
-#define the circle function
+# Created by Ivan Kelber, March 2017
+
 import sys
 import random
 import math
 
 
 def circles(points):
+    '''
+    - points is a list of n tuples (x,y) representing locations of n circles.
+        The point (x,y) at points[i] represents a circle whose center is at
+        (x,y) and whose radius is i.
+
+    This function returns the side of the smallest possible square that can
+        surround each of these circles such that no two circles are overlapping.
+        If two circles are found to be overlapping this function will return
+        sys.maxint.
+    '''
     minX = sys.maxint
     maxX = 0
 
@@ -32,20 +43,30 @@ def circles(points):
     # printDistance(distance)
     return max(maxY-minY,maxX-minX)
 
-def printDistance(distance):
-    for i in range(len(distance)):
+def printDistance(distanceMatrix):
+    '''
+    Used to print out the distance matrix computed in the circles function;
+    primarily for debugging.
+    '''
+    for i in range(len(distanceMatrix)):
         row = ""
-        for j in range(len(distance)):
-            row += str(distance[i][j]) + "\t"
+        for j in range(len(distanceMatrix)):
+            row += str(distanceMatrix[i][j]) + "\t"
         print row
 
 
 def dist(a,b,ra,rb):
+    '''
+    - a,b are centers of circles
+    - ra,rb are the respective radii of those two circles.
+
+    This function calculates the distance between the edges of two circles.
+        Note that this returns a negative value if two circles are overlapping.
+    '''
     return math.sqrt((a[0]-b[0])**2 + (a[1]-b[1])**2) - (ra + rb)
 
 def main():
-    POINTS = [(random.randrange(0,100),random.randrange(0,100)) for i in range(10)]
-    print circles(POINTS)
+    pass
 
 
 if __name__ == '__main__':
