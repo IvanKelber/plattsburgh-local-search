@@ -42,7 +42,6 @@ def main():
     # what you set epsilon and startingX to.  Ideally, startingX shouldn't matter.
     # However, depending on epsilon it appears to matter in this case.  Why?
     # Hint: How are we searching?
-
     nonConvex = lambda x: x*(x-1)*(x-2)*(x-3)
     proposalFunc = lambda x: x + (random.random() - .5)/10 #randomly add [-.05,.05] to x
     startingX = "FILL IN"
