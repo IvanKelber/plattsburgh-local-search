@@ -1,6 +1,26 @@
 # Stencil Created by Ivan Kelber, March 2017
 # Completed by <Your Name Here>, <Date Here>
 
+# This stencil assumes that you've written localSearch correctly in the file
+# localSearch.  If you haven't, then this will not work and cause you much frustration!
+# Assuming that, you have two tasks.  The first is to create proposal functions to use
+# in proposals.py.  The second is to futz with the parameters below.  That is,
+# EPSILONS, SECONDS_PER_SEARCH, and PER_EPSILON.  Note that the most important of these
+# is the EPSILONS array.
+#
+# Some hints:
+# - Each proposal function should take an array of n points and return an array of n points.
+# - Each epsilon is the precision at which we accept new x values from proposal functionsself.
+#     So, large epsilons allow us to explore our options while small epsilons let us narrow
+#     in on an optimum.  How large is large?  How small is small?  It depends on the function
+#     that we are trying to optimize.
+# - Try running slowly at first and then gradually begin speeding it up to see what works
+#     and what doesn't.
+# - If you're getting 'stuck' at a certain optimum and can't seem to get past it,
+#     it might mean that you're in a local minimum and need to explore more.  Try to change epsilon.
+# - There is no right answer.  Many things will work so try whatever you can think of!
+
+
 import random
 import math
 import sys
