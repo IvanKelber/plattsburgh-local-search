@@ -139,8 +139,6 @@ def clear():
     plt.cla()
 
 
-
-
 def main(locus):
 
     #Command line arguments

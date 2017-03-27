@@ -23,7 +23,7 @@ pip install scipy
 pip install numpy
 pip install matplotlib
 ```
-Once you clone you can run either `python Circles/circleRunner.py` or `python TSP/tspRunner.py <locus>` where options for `locus` are "circle", "sin", or "random"
+Once you clone you can run `cd` into `Circles/` or `TSP/` and run `python circleRunner.py` or `python tspRunner.py <locus>`, respectively where options for `locus` are "circle", "sin", or "random"
 
 # Stencils
 
